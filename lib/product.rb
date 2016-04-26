@@ -31,5 +31,4 @@ class Product < Udacidata
     def auto_increment
       @@count_class_instances += 1
     end
-
 end
