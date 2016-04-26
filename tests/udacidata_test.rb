@@ -17,7 +17,7 @@ class TestUdacidata < MiniTest::Test
     5.times do
       Product.create(brand: "WalterToys", name: "Sticky Notes", price: 34.00)
     end
-    after = CSV.read(@data_path).length
+    Product.create(id: 1, brand: "WalterToys", name: "Sticky Notes", price: 34.00)
     assert(after == before + 5)
   end
 
@@ -44,34 +44,34 @@ class TestUdacidata < MiniTest::Test
     assert_equal(expected, actual)
   end
 
-  # def test_first_method_returns_product_object
-  #   product = Product.first
-  #   assert_instance_of(Product, product)
-  # end
-  #
-  # def test_first_method_returns_correct_product
-  #   product = Product.first
-  #   data = CSV.read(@data_path).drop(1)
-  #   assert_equal(data.first[0].to_i, product.id)
-  # end
+  def test_first_method_returns_product_object
+    product = Product.first
+    assert_instance_of(Product, product)
+  end
 
-  # def test_first_n_returns_array
-  #   array_of_products = Product.first(3)
-  #   assert_kind_of(Array, array_of_products)
-  # end
-  #
-  # def test_first_n_returns_correct_products
-  #   array_of_products = Product.first(3)
-  #   data = CSV.read(@data_path).drop(1)
-  #   array_of_products.each_with_index do |product, index|
-  #     assert_equal(data[index][0].to_i, product.id)
-  #   end
-  # end
-  #
-  # def test_first_n_returns_correct_number_of_products
-  #   array_of_products = Product.first(3)
-  #   assert_equal(3, array_of_products.size)
-  # end
+  def test_first_method_returns_correct_product
+    product = Product.first
+    data = CSV.read(@data_path).drop(1)
+    assert_equal(data.first[0].to_i, product.id)
+  end
+
+  def test_first_n_returns_array
+    array_of_products = Product.first(3)
+    assert_kind_of(Array, array_of_products)
+  end
+
+  def test_first_n_returns_correct_products
+    array_of_products = Product.first(3)
+    data = CSV.read(@data_path).drop(1)
+    array_of_products.each_with_index do |product, index|
+      assert_equal(data[index][0].to_i, product.id)
+    end
+  end
+
+  def test_first_n_returns_correct_number_of_products
+    array_of_products = Product.first(3)
+    assert_equal(3, array_of_products.size)
+  end
 
   # def test_last_method_returns_product_object
   #   product = Product.last
