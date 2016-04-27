@@ -21,7 +21,6 @@ module Analyzable
       report << "\t- #{key}: #{value}\n"
     end
     report << "Average product price: #{average_price(product_arr)}\n"
-    puts report
     return report
   end
 
