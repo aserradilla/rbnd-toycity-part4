@@ -110,18 +110,18 @@ class TestUdacidata < MiniTest::Test
     after = CSV.read(@data_path).length
     assert_equal(before - 1, after)
   end
-  
-  # def test_destroy_method_returns_deleted_product
-  #   product = Product.destroy(7)
-  #   assert_equal(7, product.id)
-  # end
-  #
-  # def test_find_by_brand_method_returns_first_product_with_given_brand
-  #   Product.create(brand: "OritToys", name: "Sticky Notes", price: 34.00)
-  #   product = Product.find_by_brand("OritToys")
-  #   assert_equal("OritToys", product.brand)
-  # end
-  #
+
+  def test_destroy_method_returns_deleted_product
+    product = Product.destroy(7)
+    assert_equal(7, product.id)
+  end
+
+  def test_find_by_brand_method_returns_first_product_with_given_brand
+    Product.create(brand: "OritToys", name: "Sticky Notes", price: 34.00)
+    product = Product.find_by_brand("OritToys")
+    assert_equal("OritToys", product.brand)
+  end
+
   # def test_find_by_name_method_returns_first_product_with_given_name
   #   Product.create(brand: "OritToys", name: "Nyan Cat", price: 3.00)
   #   product = Product.find_by_name("Nyan Cat")

@@ -5,6 +5,7 @@ require 'csv'
 class Udacidata
   @@data_path = File.dirname(__FILE__) + "/../data/data.csv"
   create_finder_methods("name","brand","price")
+
   # Creates a product and adds it to the database if is not already in it
   def self.create(attributes = nil)
     product = Product.new(attributes)
@@ -43,16 +44,27 @@ class Udacidata
   end
 
   # Finds a product by its id
-  def self.find(index)
-    product_arr = self.all
+  def self.find(id)
     CSV.foreach(@@data_path, headers: true) do |row|
-      if row["id"].to_i == index
+      if row["id"].to_i == id
         return Product.new(id: row["id"], name: row["product"], brand: row["brand"], price: row["price"])
       end
     end
   end
 
-  # Removes a product from the database
-  def self.destroy
+  # Removes a product from the database by its id
+  def self.destroy(id)
+    db = CSV.read(@@data_path)
+    db.each_with_index do |row, index|
+      if row[0].to_i == id
+        db.delete_at(index)
+        CSV.open(@@data_path, 'wb') do |csv|
+          db.each do |row|
+            csv << row
+          end
+        end
+        return Product.new(id: row[0], name: row[2], brand: row[1], price: row[3])
+      end
+    end
   end
 end
