@@ -50,10 +50,14 @@ class Udacidata
         return Product.new(id: row["id"], name: row["product"], brand: row["brand"], price: row["price"])
       end
     end
+    raise UdacidataErrors::ProductNotFoundError, "There are no products matching '#{id}' id."
   end
 
   # Removes a product from the database by its id
   def self.destroy(id)
+    if id < 0 || id > self.all.length
+      raise UdacidataErrors::ProductNotFoundError, "The id '#{id}' is out of boundaries."
+    end
     db = CSV.read(@@data_path)
     db.each_with_index do |row, index|
       if row[0].to_i == id
@@ -66,5 +70,25 @@ class Udacidata
         return Product.new(id: row[0], name: row[2], brand: row[1], price: row[3])
       end
     end
+  end
+
+  # Returns an array of products matching given brand or name
+  def self.where(options = {})
+    all_products = self.all
+    options.each do |key, value|
+      all_products = all_products.select { |product| product.send(key) == value}
+    end
+    all_products
+  end
+
+  # Updates de information for a given product
+  def update(options = {})
+    new_attributes = {}
+    options[:name] ? new_attributes[:name] = options[:name] : new_attributes[:name] = self.name
+    options[:brand] ? new_attributes[:brand] = options[:brand] : new_attributes[:brand] = self.brand
+    options[:price] ? new_attributes[:price] = options[:price] : new_attributes[:price] = self.price
+
+    Product.destroy(self.id)
+    Product.create(new_attributes)
   end
 end
