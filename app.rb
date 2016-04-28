@@ -73,7 +73,7 @@ puts
 puts "-------------------------------"
 puts "FIND PRODUCT 4 AND UPDATE BRAND"
 puts "-------------------------------"
-print Product.find(4).update(brand: "NewBrand")
+print product = Product.find(4).update(brand: "NewBrand")
 
 puts
 puts "--------------"

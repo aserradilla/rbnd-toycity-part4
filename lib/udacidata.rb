@@ -32,15 +32,13 @@ class Udacidata
   end
 
   # Returns the first n products of the database
-  def self.first(number = 1)
-    product_arr = self.all
-    return number == 1 ? product_arr.first : product_arr.first(number)
+  def self.first(item = 1)
+    item > 1 ? self.all.take(item) : self.all.first
   end
 
   # Returns the last n products of the database
-  def self.last(number = 1)
-    product_arr = self.all
-    return number == 1 ? product_arr.last : product_arr.last(number)
+  def self.last(item = 1)
+    item > 1 ? self.all.reverse.take(item) : self.all.reverse.first
   end
 
   # Finds a product by its id
@@ -55,21 +53,15 @@ class Udacidata
 
   # Removes a product from the database by its id
   def self.destroy(id)
-    if id < 0 || id > self.all.length
-      raise UdacidataErrors::ProductNotFoundError, "The id '#{id}' is out of boundaries."
+    product = self.find(id)
+    table = CSV.table(@@data_path)
+    table.delete_if do |row|
+      row[:id] == id
     end
-    db = CSV.read(@@data_path)
-    db.each_with_index do |row, index|
-      if row[0].to_i == id
-        db.delete_at(index)
-        CSV.open(@@data_path, 'wb') do |csv|
-          db.each do |row|
-            csv << row
-          end
-        end
-        return Product.new(id: row[0], name: row[2], brand: row[1], price: row[3])
-      end
+    File.open(@@data_path, 'w') do |f|
+      f.write(table.to_csv)
     end
+    return product
   end
 
   # Returns an array of products matching given brand or name
@@ -84,6 +76,7 @@ class Udacidata
   # Updates de information for a given product
   def update(options = {})
     new_attributes = {}
+    new_attributes[:id] = self.id
     options[:name] ? new_attributes[:name] = options[:name] : new_attributes[:name] = self.name
     options[:brand] ? new_attributes[:brand] = options[:brand] : new_attributes[:brand] = self.brand
     options[:price] ? new_attributes[:price] = options[:price] : new_attributes[:price] = self.price
